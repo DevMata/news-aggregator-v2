@@ -6,7 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { NewsModule } from './news/news.module';
 import { LoginModule } from './login/login.module';
 import { JwtModule } from '@nestjs/jwt';
-import { UserModule } from './user/user.module';
+import { UsersModule } from './users/users.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
 
@@ -23,7 +23,7 @@ import { Connection } from 'typeorm';
         signOptions: { expiresIn: '1h' },
       }),
     }),
-    UserModule,
+    UsersModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
