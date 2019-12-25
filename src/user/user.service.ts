@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from './dto/user.dto';
 import { HashHelper } from 'src/common/hash.helper';
 
@@ -27,11 +27,10 @@ export class UserService {
     return this.userRepository.findOne(id);
   }
 
-  async updateUser(id: string, password: string): Promise<User> {
+  async updateUser(id: string, password: string): Promise<UpdateResult> {
     const user = await this.findOne(id);
     if (!user) throw new NotFoundException('User not found');
 
-    user.password = this.hashHelper.hash(password);
-    return this.userRepository.save(user);
+    return this.userRepository.update(id, { password: this.hashHelper.hash(password) });
   }
 }
