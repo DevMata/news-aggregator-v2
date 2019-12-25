@@ -1,23 +1,35 @@
-import { Controller, Get, Post, UsePipes, ValidationPipe, Body } from '@nestjs/common';
+import { Controller, Get, Post, UsePipes, ValidationPipe, Body, Param, Put } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/user.dto';
+import { ChangePasswordDto } from './dto/password.dto';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  findAll(): Promise<User[]> {
+  getUsers(): Promise<User[]> {
     return this.userService.findAll();
+  }
+
+  @Get(':id')
+  findUser(@Param('id') id: string): Promise<User> {
+    return this.userService.findOne(id);
   }
 
   @Post()
   @UsePipes(new ValidationPipe({ transform: true }))
-  createOne(
+  createUser(
     @Body()
     createUserDto: CreateUserDto,
   ): Promise<User> {
-    return this.userService.createUser(createUserDto);
+    return this.userService.createOne(createUserDto);
+  }
+
+  @Put(':id')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  updateUser(@Param('id') id: string, @Body() changePasswordDto: ChangePasswordDto): Promise<User> {
+    return this.userService.updateUser(id, changePasswordDto.password);
   }
 }
