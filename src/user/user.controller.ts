@@ -3,6 +3,7 @@ import { User } from './user.entity';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/user.dto';
 import { ChangePasswordDto } from './dto/password.dto';
+import { UpdateResult } from 'typeorm';
 
 @Controller('users')
 export class UserController {
@@ -29,7 +30,7 @@ export class UserController {
 
   @Put(':id')
   @UsePipes(new ValidationPipe({ transform: true }))
-  updateUser(@Param('id') id: string, @Body() changePasswordDto: ChangePasswordDto): Promise<User> {
+  updateUser(@Param('id') id: string, @Body() changePasswordDto: ChangePasswordDto): Promise<UpdateResult> {
     return this.userService.updateUser(id, changePasswordDto.password);
   }
 }
