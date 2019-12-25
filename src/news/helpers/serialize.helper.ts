@@ -4,6 +4,7 @@ import { GuardianNew } from '../interfaces/TheGuardian.interface';
 import { New } from '../interfaces/New.interface';
 import { getNewYorkAuthor } from './regex.helper';
 import { getGuardianContributors } from './formater.helper';
+import { NewsApiNew } from '../interfaces/NewsApi.interface';
 
 export function SerializeNewYorkNew(newYorkNew: NewYorkTimeNew): New {
   const {
@@ -31,5 +32,17 @@ export function SerializeGuardianNew(guardianNew: GuardianNew): New {
     source: 'The Guardian',
     title: webTitle,
     author: getGuardianContributors(tags),
+  };
+}
+
+export function SerializeNewsApiNew(newsApiNew: NewsApiNew): New {
+  const { source, author, publishedAt, url, title } = newsApiNew;
+
+  return {
+    url: url,
+    publishedAt: publishedAt,
+    source: source.name,
+    title: title,
+    author: author,
   };
 }
