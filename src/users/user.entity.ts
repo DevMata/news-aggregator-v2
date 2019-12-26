@@ -19,8 +19,8 @@ export class User {
   modifiedAt: Date;
 
   @OneToMany(
-    type => UsersToNews,
+    () => UsersToNews,
     usersToNews => usersToNews.user,
   )
-  public usersToNews!: UsersToNews;
+  public usersToNews!: UsersToNews[];
 }
