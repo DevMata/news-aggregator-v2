@@ -4,25 +4,15 @@ import { ValidateSourceParamMiddleware } from './news/middleware/validate-source
 import { ValidateJsonMiddleware } from './login/middleware/validate-json.middleware';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { NewsModule } from './news/news.module';
-import { LoginModule } from './login/login.module';
-import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
+import { LoginModule } from './login/login.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     NewsModule,
-    LoginModule,
-    JwtModule.registerAsync({
-      imports: [ConfigService],
-      inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: '1h' },
-      }),
-    }),
     UsersModule,
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -40,6 +30,7 @@ import { Connection } from 'typeorm';
       },
       inject: [ConfigService],
     }),
+    LoginModule,
   ],
 })
 export class AppModule implements NestModule {
