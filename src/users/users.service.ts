@@ -4,11 +4,15 @@ import { User } from './user.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from './dto/user.dto';
 import { HashHelper } from 'src/common/hash.helper';
+import { NewsService } from './news/news.service';
+import { UsersToNewsService } from './userstonews/userstonews.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly newsService: NewsService,
+    private readonly usersToNewsService: UsersToNewsService,
     private readonly hashHelper: HashHelper,
   ) {}
 
@@ -16,11 +20,16 @@ export class UsersService {
     return this.userRepository.find();
   }
 
-  createOne(createUserDto: CreateUserDto): Promise<User> {
-    const { password } = createUserDto;
-    createUserDto.password = this.hashHelper.hash(password);
+  async createOne(createUserDto: CreateUserDto): Promise<User> {
+    try {
+      const { password } = createUserDto;
+      createUserDto.password = this.hashHelper.hash(password);
 
-    return this.userRepository.save(createUserDto);
+      const newUser = await this.userRepository.save(createUserDto);
+      return newUser;
+    } catch {
+      console.log('User already exists');
+    }
   }
 
   findOne(id: string): Promise<User> {
