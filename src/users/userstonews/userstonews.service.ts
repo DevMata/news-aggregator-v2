@@ -1,12 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { UsersToNews } from './userstonews.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { SaveNewToUserDto } from './usersToNews.dto';
 import { User } from '../user.entity';
 import { New } from '../news/news.entity';
 
 @Injectable()
 export class UsersToNewsService {
   constructor(@InjectRepository(UsersToNews) private readonly usersToNewsRepository: Repository<UsersToNews>) {}
+
+  async searchNewFromUser(user: User, article: New): Promise<UsersToNews> {
+    return this.usersToNewsRepository.findOne({ user: user, new: article });
+  }
+
+  async saveNewToUser(user: User, article: New): Promise<UsersToNews> {
+    const searchedNewFromUser = await this.searchNewFromUser(user, article);
+
+    if (searchedNewFromUser) {
+      throw new ConflictException('Article is already saved for this user');
+    }
+
+    return this.usersToNewsRepository.save({ user, article });
+  }
 }
