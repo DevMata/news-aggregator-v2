@@ -2,12 +2,19 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LoginDto } from './dto/login.dto';
 import { sign } from 'jsonwebtoken';
+import { UsersService } from 'src/users/users.service';
+import { JwtService } from '@nestjs/jwt';
+import { compareSync } from 'bcryptjs';
 
 @Injectable()
 export class LoginService {
   private readonly Users: LoginDto[] = [];
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly usersService: UsersService,
+    private readonly jwtService: JwtService,
+  ) {
     this.pushUser();
   }
 
@@ -27,5 +34,21 @@ export class LoginService {
     const secret = this.configService.get<string>('JWT_SECRET');
 
     return sign(user, secret, { expiresIn: '1h' });
+  }
+
+  async validateUser(username: string, password: string): Promise<{ userId: string; username: string }> {
+    const user = await this.usersService.findOneByName(username);
+
+    if (user && compareSync(password, user.password)) {
+      const { userId, username } = user;
+      return { userId, username };
+    }
+    return null;
+  }
+
+  async login(user: { userId: string; username: string }): Promise<{ accessToken: string }> {
+    const payload = { username: user.username, sub: user.userId };
+
+    return { accessToken: this.jwtService.sign(payload) };
   }
 }
