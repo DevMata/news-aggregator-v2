@@ -10,8 +10,8 @@ export class New {
   webUrl: string;
 
   @OneToMany(
-    type => UsersToNews,
+    () => UsersToNews,
     usersToNews => usersToNews.new,
   )
-  public usersToNews!: UsersToNews;
+  public usersToNews!: UsersToNews[];
 }
