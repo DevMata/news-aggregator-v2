@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { UsersToNews } from './userstonews/userstonews.entity';
 
 @Entity()
 export class User {
@@ -16,4 +17,10 @@ export class User {
 
   @UpdateDateColumn()
   modifiedAt: Date;
+
+  @OneToMany(
+    type => UsersToNews,
+    usersToNews => usersToNews.user,
+  )
+  public usersToNews!: UsersToNews;
 }
