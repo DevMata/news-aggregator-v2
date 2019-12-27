@@ -8,4 +8,4 @@ import { UsersToArticlesService } from './userstoarticles.service';
   providers: [UsersToArticlesService],
   exports: [UsersToArticlesService],
 })
-export class UsersToNewsModule {}
+export class UsersToArticlesModule {}
