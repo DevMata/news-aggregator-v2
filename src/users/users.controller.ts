@@ -10,7 +10,6 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   UseGuards,
-  Req,
 } from '@nestjs/common';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
@@ -46,12 +45,12 @@ export class UsersController {
     @Body()
     createUserDto: CreateUserDto,
   ): Promise<UserSerialize> {
-    return this.userService.createOne(createUserDto);
+    return this.userService.createUser(createUserDto);
   }
 
-  @Put(':userId')
+  @Put(':userId/changePassword')
   @UsePipes(new ValidationPipe({ transform: true }))
-  updateUser(@Param('userId') userId: string, @Body() changePasswordDto: ChangePasswordDto): Promise<UpdateResult> {
+  changePassword(@Param('userId') userId: string, @Body() changePasswordDto: ChangePasswordDto): Promise<UpdateResult> {
     return this.userService.changePassword(userId, changePasswordDto.password);
   }
 
@@ -71,7 +70,7 @@ export class UsersController {
   @Post(':userId/share')
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe({ transform: true }))
-  shareArticle(@Req() request, @Body() shareArticleDto: ShareArticleDto): Promise<UsersToArticles> {
-    return this.userService.shareArticle(request.user, shareArticleDto.userId, shareArticleDto.webUrl);
+  shareArticle(@Param('userId') userId: string, @Body() shareArticleDto: ShareArticleDto): Promise<UsersToArticles> {
+    return this.userService.shareArticle(userId, shareArticleDto);
   }
 }
