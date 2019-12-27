@@ -9,7 +9,7 @@ import { UsersToArticlesService } from './userstoarticles/userstoarticles.servic
 import { SaveArticleDto } from './articles/articles.dto';
 import { Article } from './articles/articles.entity';
 import { UsersToArticles } from './userstoarticles/userstoarticles.entity';
-import { UserBody } from 'src/login/dto/userbody.dto';
+import { ShareArticleDto } from './dto/shareArticle.dto';
 
 @Injectable()
 export class UsersService {
@@ -24,30 +24,31 @@ export class UsersService {
     return this.userRepository.find({ select: ['userId', 'username', 'createdAt', 'modifiedAt'] });
   }
 
-  async createOne(createUserDto: CreateUserDto): Promise<User> {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     try {
       const { password } = createUserDto;
       createUserDto.password = this.hashHelper.hash(password);
 
-      return this.userRepository.save(createUserDto);
+      const createdUser = await this.userRepository.save(createUserDto);
+      return createdUser;
     } catch {
       throw new ConflictException('User already exists');
     }
   }
 
-  findUserById(id: string): Promise<User> {
-    return this.userRepository.findOne(id, { select: ['userId', 'username', 'createdAt', 'modifiedAt'] });
+  findUserById(userId: string): Promise<User> {
+    return this.userRepository.findOne(userId, { select: ['userId', 'username', 'createdAt', 'modifiedAt'] });
   }
 
   findUserByName(username: string): Promise<User> {
     return this.userRepository.findOne({ username: username });
   }
 
-  async changePassword(id: string, password: string): Promise<UpdateResult> {
-    const user = await this.findUserById(id);
+  async changePassword(userId: string, password: string): Promise<UpdateResult> {
+    const user = await this.findUserById(userId);
     if (!user) throw new NotFoundException('User not found');
 
-    return this.userRepository.update(id, { password: this.hashHelper.hash(password) });
+    return this.userRepository.update(userId, { password: this.hashHelper.hash(password) });
   }
 
   async saveArticleToUser(userId: string, saveArticleDto: SaveArticleDto): Promise<UsersToArticles> {
@@ -81,11 +82,11 @@ export class UsersService {
     }
   }
 
-  async shareArticle(user: UserBody, userId: string, webUrl: string): Promise<UsersToArticles> {
-    if (user.userId === userId) {
+  async shareArticle(userId: string, shareArticleDto: ShareArticleDto): Promise<UsersToArticles> {
+    if (userId === shareArticleDto.userId) {
       throw new MethodNotAllowedException('User must no share articles with himself');
     }
 
-    return this.saveArticleToUser(userId, { webUrl });
+    return this.saveArticleToUser(shareArticleDto.userId, { webUrl: shareArticleDto.webUrl });
   }
 }
