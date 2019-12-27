@@ -8,6 +8,12 @@ import { SaveNewDto } from './news.dto';
 export class NewsService {
   constructor(@InjectRepository(New) private readonly newsRepository: Repository<New>) {}
 
+  private async searchNew(saveNewDto: SaveNewDto): Promise<New> {
+    const searchedNew = await this.newsRepository.findOne({ webUrl: saveNewDto.webUrl });
+
+    return searchedNew;
+  }
+
   async saveNew(saveNewDto: SaveNewDto): Promise<New> {
     const searcheNew = await this.searchNew(saveNewDto);
     if (searcheNew) {
@@ -15,11 +21,5 @@ export class NewsService {
     }
 
     return this.newsRepository.save(saveNewDto);
-  }
-
-  async searchNew(saveNewDto: SaveNewDto): Promise<New> {
-    const searchedNew = await this.newsRepository.findOne({ webUrl: saveNewDto.webUrl });
-
-    return searchedNew;
   }
 }
