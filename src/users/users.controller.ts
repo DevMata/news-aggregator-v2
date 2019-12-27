@@ -1,4 +1,15 @@
-import { Controller, Get, Post, UsePipes, ValidationPipe, Body, Param, Put } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  UsePipes,
+  ValidationPipe,
+  Body,
+  Param,
+  Put,
+  UseInterceptors,
+  ClassSerializerInterceptor,
+} from '@nestjs/common';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/user.dto';
@@ -7,6 +18,7 @@ import { UpdateResult } from 'typeorm';
 import { SaveArticleDto } from './articles/articles.dto';
 import { Article } from './articles/articles.entity';
 import { UsersToArticles } from './userstoarticles/userstoarticles.entity';
+import { UserSerialize } from './users.serializer';
 
 @Controller('users')
 export class UsersController {
@@ -18,16 +30,18 @@ export class UsersController {
   }
 
   @Get(':id')
-  findUser(@Param('id') id: string): Promise<User> {
+  @UseInterceptors(ClassSerializerInterceptor)
+  findUser(@Param('id') id: string): Promise<UserSerialize> {
     return this.userService.findUserById(id);
   }
 
   @Post()
+  @UseInterceptors(ClassSerializerInterceptor)
   @UsePipes(new ValidationPipe({ transform: true }))
   createUser(
     @Body()
     createUserDto: CreateUserDto,
-  ): Promise<User> {
+  ): Promise<UserSerialize> {
     return this.userService.createOne(createUserDto);
   }
 
