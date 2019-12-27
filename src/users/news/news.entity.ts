@@ -11,7 +11,7 @@ export class New {
 
   @OneToMany(
     () => UsersToNews,
-    usersToNews => usersToNews.new,
+    usersToNews => usersToNews.article,
   )
   public usersToNews!: UsersToNews[];
 }
