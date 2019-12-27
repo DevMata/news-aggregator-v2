@@ -9,6 +9,7 @@ import {
   Put,
   UseInterceptors,
   ClassSerializerInterceptor,
+  UseGuards,
 } from '@nestjs/common';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
@@ -19,6 +20,7 @@ import { SaveArticleDto } from './articles/articles.dto';
 import { Article } from './articles/articles.entity';
 import { UsersToArticles } from './userstoarticles/userstoarticles.entity';
 import { UserSerialize } from './users.serializer';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('users')
 export class UsersController {
@@ -29,10 +31,10 @@ export class UsersController {
     return this.userService.findAll();
   }
 
-  @Get(':id')
+  @Get(':userId')
   @UseInterceptors(ClassSerializerInterceptor)
-  findUser(@Param('id') id: string): Promise<UserSerialize> {
-    return this.userService.findUserById(id);
+  findUser(@Param('userId') userId: string): Promise<UserSerialize> {
+    return this.userService.findUserById(userId);
   }
 
   @Post()
@@ -45,19 +47,21 @@ export class UsersController {
     return this.userService.createOne(createUserDto);
   }
 
-  @Put(':id')
+  @Put(':userId')
   @UsePipes(new ValidationPipe({ transform: true }))
-  updateUser(@Param('id') id: string, @Body() changePasswordDto: ChangePasswordDto): Promise<UpdateResult> {
-    return this.userService.changePassword(id, changePasswordDto.password);
+  updateUser(@Param('userId') userId: string, @Body() changePasswordDto: ChangePasswordDto): Promise<UpdateResult> {
+    return this.userService.changePassword(userId, changePasswordDto.password);
   }
 
   @Post(':userId')
+  @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe({ transform: true }))
   saveArticleToUser(@Param('userId') userId: string, @Body() saveArticleDto: SaveArticleDto): Promise<UsersToArticles> {
     return this.userService.saveArticleToUser(userId, saveArticleDto);
   }
 
   @Get(':userId/articles')
+  @UseGuards(AuthGuard('jwt'))
   getUserArticles(@Param('userId') userId: string): Promise<Article[]> {
     return this.userService.getUserArticles(userId);
   }
