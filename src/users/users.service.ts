@@ -1,4 +1,10 @@
-import { Injectable, NotFoundException, ConflictException, MethodNotAllowedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+  MethodNotAllowedException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository, UpdateResult } from 'typeorm';
@@ -10,6 +16,7 @@ import { SaveArticleDto } from './articles/articles.dto';
 import { Article } from './articles/articles.entity';
 import { UsersToArticles } from './userstoarticles/userstoarticles.entity';
 import { ShareArticleDto } from './dto/shareArticle.dto';
+import { UserBody } from 'src/login/dto/userbody.dto';
 
 @Injectable()
 export class UsersService {
@@ -44,7 +51,9 @@ export class UsersService {
     return this.userRepository.findOne({ username: username });
   }
 
-  async changePassword(userId: string, password: string): Promise<UpdateResult> {
+  async changePassword(userId: string, password: string, userBodyDto: UserBody): Promise<UpdateResult> {
+    if (userId !== userBodyDto.userId) throw new UnauthorizedException('Password can not be change by another user');
+
     const user = await this.findUserById(userId);
     if (!user) throw new NotFoundException('User not found');
 
