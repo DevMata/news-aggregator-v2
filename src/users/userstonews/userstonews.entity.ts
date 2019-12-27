@@ -18,7 +18,7 @@ export class UsersToNews {
 
   @ManyToOne(
     () => New,
-    n => n.usersToNews,
+    article => article.usersToNews,
   )
-  public new!: New;
+  public article!: New;
 }
