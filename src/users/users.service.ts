@@ -7,6 +7,8 @@ import { HashHelper } from 'src/common/hash.helper';
 import { NewsService } from './news/news.service';
 import { UsersToNewsService } from './userstonews/userstonews.service';
 import { SaveNewDto } from './news/news.dto';
+import { New } from './news/news.entity';
+import { UsersToNews } from './userstonews/userstonews.entity';
 
 @Injectable()
 export class UsersService {
@@ -48,12 +50,34 @@ export class UsersService {
     return this.userRepository.update(id, { password: this.hashHelper.hash(password) });
   }
 
-  async saveNewToUser(userId: string, a: SaveNewDto): Promise<void> {
+  async saveArticleToUser(userId: string, saveArticleDto: SaveNewDto): Promise<UsersToNews> {
     const user = await this.findUserById(userId);
-    if (!user) throw new NotFoundException('User does not exists');
+    if (!user) throw new NotFoundException('User not found');
 
-    const article = await this.newsService.saveNew(a);
+    const article = await this.newsService.saveArticle(saveArticleDto);
 
-    this.usersToNewsService.saveArticleToUser(user, article);
+    return this.usersToNewsService.saveArticleToUser(user, article);
+  }
+
+  async getUserArticles(userId: string): Promise<New[]> {
+    const user = await this.findUserById(userId);
+    if (!user) throw new NotFoundException('User not found');
+
+    const x = await this.userRepository.findOne({
+      join: {
+        alias: 'user',
+        leftJoinAndSelect: {
+          usersToNews: 'user.usersToNews',
+          new: 'usersToNews.article',
+        },
+      },
+      where: { userId: userId },
+    });
+
+    if (x && x.usersToNews) {
+      return x.usersToNews.map(rel => rel.article);
+    } else {
+      return [];
+    }
   }
 }
