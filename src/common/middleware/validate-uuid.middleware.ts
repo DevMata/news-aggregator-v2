@@ -7,13 +7,19 @@ export class ValidateUuidMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: Function): void {
     const validator = new Validator();
 
-    if (validator.isUUID(req.param['id'])) {
-      next();
+    const tokens = req.url.split('/');
+
+    if (tokens.length > 1 && tokens.every(tok => tok !== '')) {
+      if (validator.isUUID(tokens[1])) {
+        next();
+      } else {
+        res
+          .status(400)
+          .contentType('application/json')
+          .json({ message: 'A valid Uuid is required' });
+      }
     } else {
-      res
-        .status(400)
-        .contentType('application/json')
-        .json({ message: 'A valid Uuid is required' });
+      next();
     }
   }
 }
