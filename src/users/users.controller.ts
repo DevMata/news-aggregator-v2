@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
@@ -49,12 +50,17 @@ export class UsersController {
   }
 
   @Put(':userId/changePassword')
+  @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe({ transform: true }))
-  changePassword(@Param('userId') userId: string, @Body() changePasswordDto: ChangePasswordDto): Promise<UpdateResult> {
-    return this.userService.changePassword(userId, changePasswordDto.password);
+  changePassword(
+    @Param('userId') userId: string,
+    @Body() changePasswordDto: ChangePasswordDto,
+    @Req() req,
+  ): Promise<UpdateResult> {
+    return this.userService.changePassword(userId, changePasswordDto.password, req.user);
   }
 
-  @Post(':userId')
+  @Post(':userId/articles')
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe({ transform: true }))
   saveArticleToUser(@Param('userId') userId: string, @Body() saveArticleDto: SaveArticleDto): Promise<UsersToArticles> {
