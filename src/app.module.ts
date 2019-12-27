@@ -6,7 +6,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { NewsModule } from './news/news.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
 import { LoginModule } from './login/login.module';
 
 @Module({
@@ -34,10 +33,9 @@ import { LoginModule } from './login/login.module';
   ],
 })
 export class AppModule implements NestModule {
-  constructor(private readonly connection: Connection) {}
-
   configure(consumer: MiddlewareConsumer): void {
     consumer.apply(ValidateSearchMiddleware, ValidateSourceParamMiddleware).forRoutes('news');
     consumer.apply(ValidateJsonMiddleware).forRoutes('login');
+    consumer.apply(ValidateJsonMiddleware).forRoutes('users');
   }
 }
