@@ -4,7 +4,7 @@ import { Request, Response } from 'express';
 @Injectable()
 export class ValidateSourceParamMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: Function): void {
-    const validSources = ['nyt', 'guardian', 'both'];
+    const validSources = ['nyt', 'guardian', 'news', 'all'];
 
     if (!req.query['source']) {
       res
