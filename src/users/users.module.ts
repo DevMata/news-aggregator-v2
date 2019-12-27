@@ -4,11 +4,11 @@ import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { HashHelper } from 'src/common/hash.helper';
-import { NewsModule } from './articles/news.module';
+import { ArticlesModule } from './articles/articles.module';
 import { UsersToNewsModule } from './userstoarticles/userstonews.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), NewsModule, UsersToNewsModule],
+  imports: [TypeOrmModule.forFeature([User]), ArticlesModule, UsersToNewsModule],
   providers: [UsersService, HashHelper],
   controllers: [UsersController],
   exports: [UsersService],
