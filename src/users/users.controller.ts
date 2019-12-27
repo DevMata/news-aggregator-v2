@@ -4,7 +4,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/user.dto';
 import { ChangePasswordDto } from './dto/password.dto';
 import { UpdateResult } from 'typeorm';
-import { SaveNewDto } from './articles/news.dto';
+import { SaveArticleDto } from './articles/articles.dto';
 import { New } from './articles/news.entity';
 import { UsersToNews } from './userstoarticles/userstonews.entity';
 
@@ -39,7 +39,7 @@ export class UsersController {
 
   @Post(':userId')
   @UsePipes(new ValidationPipe({ transform: true }))
-  saveArticleToUser(@Param('userId') userId: string, @Body() saveNewDto: SaveNewDto): Promise<UsersToNews> {
+  saveArticleToUser(@Param('userId') userId: string, @Body() saveNewDto: SaveArticleDto): Promise<UsersToNews> {
     return this.userService.saveArticleToUser(userId, saveNewDto);
   }
 

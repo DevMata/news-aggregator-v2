@@ -1,6 +1,6 @@
 import { IsUrl } from 'class-validator';
 
-export class SaveNewDto {
+export class SaveArticleDto {
   @IsUrl()
   webUrl: string;
 }

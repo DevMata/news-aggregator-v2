@@ -6,7 +6,7 @@ import { CreateUserDto } from './dto/user.dto';
 import { HashHelper } from 'src/common/hash.helper';
 import { NewsService } from './articles/news.service';
 import { UsersToNewsService } from './userstoarticles/userstonews.service';
-import { SaveNewDto } from './articles/news.dto';
+import { SaveArticleDto } from './articles/articles.dto';
 import { New } from './articles/news.entity';
 import { UsersToNews } from './userstoarticles/userstonews.entity';
 
@@ -50,7 +50,7 @@ export class UsersService {
     return this.userRepository.update(id, { password: this.hashHelper.hash(password) });
   }
 
-  async saveArticleToUser(userId: string, saveArticleDto: SaveNewDto): Promise<UsersToNews> {
+  async saveArticleToUser(userId: string, saveArticleDto: SaveArticleDto): Promise<UsersToNews> {
     const user = await this.findUserById(userId);
     if (!user) throw new NotFoundException('User not found');
 
