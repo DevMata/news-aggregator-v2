@@ -5,7 +5,7 @@ import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from './dto/user.dto';
 import { HashHelper } from 'src/common/hash.helper';
 import { ArticlesService } from './articles/articles.service';
-import { UsersToNewsService } from './userstoarticles/userstonews.service';
+import { UsersToArticlesService } from './userstoarticles/userstoarticles.service';
 import { SaveArticleDto } from './articles/articles.dto';
 import { Article } from './articles/articles.entity';
 import { UsersToArticles } from './userstoarticles/userstoarticles.entity';
@@ -15,7 +15,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly articlesService: ArticlesService,
-    private readonly usersToNewsService: UsersToNewsService,
+    private readonly usersToNewsService: UsersToArticlesService,
     private readonly hashHelper: HashHelper,
   ) {}
 

@@ -6,17 +6,19 @@ import { User } from '../user.entity';
 import { Article } from '../articles/articles.entity';
 
 @Injectable()
-export class UsersToNewsService {
-  constructor(@InjectRepository(UsersToArticles) private readonly usersToNewsRepository: Repository<UsersToArticles>) {}
+export class UsersToArticlesService {
+  constructor(
+    @InjectRepository(UsersToArticles) private readonly usersToArticlesRepository: Repository<UsersToArticles>,
+  ) {}
 
   searchArticleFromUser(user: User, article: Article): Promise<UsersToArticles> {
-    return this.usersToNewsRepository.findOne({ user: user, article: article });
+    return this.usersToArticlesRepository.findOne({ user: user, article: article });
   }
 
   async saveArticleToUser(user: User, article: Article): Promise<UsersToArticles> {
     const relation = await this.searchArticleFromUser(user, article);
     if (relation) throw new ConflictException('User already save this article');
 
-    return this.usersToNewsRepository.save({ user, article });
+    return this.usersToArticlesRepository.save({ user, article });
   }
 }
