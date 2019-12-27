@@ -4,6 +4,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/user.dto';
 import { ChangePasswordDto } from './dto/password.dto';
 import { UpdateResult } from 'typeorm';
+import { SaveNewDto } from './news/news.dto';
 
 @Controller('users')
 export class UsersController {
@@ -32,5 +33,11 @@ export class UsersController {
   @UsePipes(new ValidationPipe({ transform: true }))
   updateUser(@Param('id') id: string, @Body() changePasswordDto: ChangePasswordDto): Promise<UpdateResult> {
     return this.userService.changePassword(id, changePasswordDto.password);
+  }
+
+  @Post(':userId')
+  @UsePipes(new ValidationPipe({ transform: true }))
+  saveArticleToUser(@Param('userId') userId: string, @Body() saveNewDto: SaveNewDto): void {
+    this.userService.saveNewToUser(userId, saveNewDto);
   }
 }
