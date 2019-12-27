@@ -21,6 +21,7 @@ import { Article } from './articles/articles.entity';
 import { UsersToArticles } from './userstoarticles/userstoarticles.entity';
 import { UserSerialize } from './users.serializer';
 import { AuthGuard } from '@nestjs/passport';
+import { ShareArticleDto } from './dto/shareArticle.dto';
 
 @Controller('users')
 export class UsersController {
@@ -64,5 +65,12 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'))
   getUserArticles(@Param('userId') userId: string): Promise<Article[]> {
     return this.userService.getUserArticles(userId);
+  }
+
+  @Post(':userId/share')
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe({ transform: true }))
+  shareArticle(@Body() shareArticleDto: ShareArticleDto): Promise<UsersToArticles> {
+    return this.userService.saveArticleToUser(shareArticleDto.userId, { webUrl: shareArticleDto.webUrl });
   }
 }
