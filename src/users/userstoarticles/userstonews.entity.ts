@@ -1,5 +1,5 @@
 import { Entity, CreateDateColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { New } from '../news/news.entity';
+import { New } from '../articles/news.entity';
 import { User } from '../user.entity';
 
 @Entity()

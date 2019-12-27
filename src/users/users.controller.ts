@@ -4,8 +4,8 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/user.dto';
 import { ChangePasswordDto } from './dto/password.dto';
 import { UpdateResult } from 'typeorm';
-import { SaveNewDto } from './news/news.dto';
-import { New } from './news/news.entity';
+import { SaveNewDto } from './articles/news.dto';
+import { New } from './articles/news.entity';
 import { UsersToNews } from './userstoarticles/userstonews.entity';
 
 @Controller('users')

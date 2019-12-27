@@ -4,10 +4,10 @@ import { User } from './user.entity';
 import { Repository, UpdateResult } from 'typeorm';
 import { CreateUserDto } from './dto/user.dto';
 import { HashHelper } from 'src/common/hash.helper';
-import { NewsService } from './news/news.service';
+import { NewsService } from './articles/news.service';
 import { UsersToNewsService } from './userstoarticles/userstonews.service';
-import { SaveNewDto } from './news/news.dto';
-import { New } from './news/news.entity';
+import { SaveNewDto } from './articles/news.dto';
+import { New } from './articles/news.entity';
 import { UsersToNews } from './userstoarticles/userstonews.entity';
 
 @Injectable()

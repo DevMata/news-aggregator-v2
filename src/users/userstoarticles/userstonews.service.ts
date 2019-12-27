@@ -3,7 +3,7 @@ import { Repository } from 'typeorm';
 import { UsersToNews } from './userstonews.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user.entity';
-import { New } from '../news/news.entity';
+import { New } from '../articles/news.entity';
 
 @Injectable()
 export class UsersToNewsService {

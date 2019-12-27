@@ -4,7 +4,7 @@ import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { HashHelper } from 'src/common/hash.helper';
-import { NewsModule } from './news/news.module';
+import { NewsModule } from './articles/news.module';
 import { UsersToNewsModule } from './userstoarticles/userstonews.module';
 
 @Module({
