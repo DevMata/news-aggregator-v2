@@ -9,16 +9,13 @@ import { New } from '../news/news.entity';
 export class UsersToNewsService {
   constructor(@InjectRepository(UsersToNews) private readonly usersToNewsRepository: Repository<UsersToNews>) {}
 
-  private async searchNewFromUser(user: User, article: New): Promise<UsersToNews> {
-    return this.usersToNewsRepository.findOne({ user: user, new: article });
+  searchArticleFromUser(user: User, article: New): Promise<UsersToNews> {
+    return this.usersToNewsRepository.findOne({ user: user, article: article });
   }
 
   async saveArticleToUser(user: User, article: New): Promise<UsersToNews> {
-    const searchedNewFromUser = await this.searchNewFromUser(user, article);
-
-    if (searchedNewFromUser) {
-      throw new ConflictException('Article is already saved for this user');
-    }
+    const relation = await this.searchArticleFromUser(user, article);
+    if (relation) throw new ConflictException('User already save this article');
 
     return this.usersToNewsRepository.save({ user, article });
   }
