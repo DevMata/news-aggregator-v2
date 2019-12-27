@@ -19,8 +19,9 @@ import { UpdateResult } from 'typeorm';
 import { SaveArticleDto } from './articles/articles.dto';
 import { Article } from './articles/articles.entity';
 import { UsersToArticles } from './userstoarticles/userstoarticles.entity';
-import { UserSerialize } from './users.serializer';
+import { UserSerialize } from './dto/users.serializer';
 import { AuthGuard } from '@nestjs/passport';
+import { ShareArticleDto } from './dto/shareArticle.dto';
 
 @Controller('users')
 export class UsersController {
@@ -44,12 +45,12 @@ export class UsersController {
     @Body()
     createUserDto: CreateUserDto,
   ): Promise<UserSerialize> {
-    return this.userService.createOne(createUserDto);
+    return this.userService.createUser(createUserDto);
   }
 
-  @Put(':userId')
+  @Put(':userId/changePassword')
   @UsePipes(new ValidationPipe({ transform: true }))
-  updateUser(@Param('userId') userId: string, @Body() changePasswordDto: ChangePasswordDto): Promise<UpdateResult> {
+  changePassword(@Param('userId') userId: string, @Body() changePasswordDto: ChangePasswordDto): Promise<UpdateResult> {
     return this.userService.changePassword(userId, changePasswordDto.password);
   }
 
@@ -64,5 +65,12 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'))
   getUserArticles(@Param('userId') userId: string): Promise<Article[]> {
     return this.userService.getUserArticles(userId);
+  }
+
+  @Post(':userId/share')
+  @UseGuards(AuthGuard('jwt'))
+  @UsePipes(new ValidationPipe({ transform: true }))
+  shareArticle(@Param('userId') userId: string, @Body() shareArticleDto: ShareArticleDto): Promise<UsersToArticles> {
+    return this.userService.shareArticle(userId, shareArticleDto);
   }
 }

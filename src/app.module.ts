@@ -7,6 +7,7 @@ import { NewsModule } from './news/news.module';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { LoginModule } from './login/login.module';
+import { ValidateUuidMiddleware } from './common/middleware/validate-uuid.middleware';
 
 @Module({
   imports: [
@@ -35,7 +36,6 @@ import { LoginModule } from './login/login.module';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
     consumer.apply(ValidateSearchMiddleware, ValidateSourceParamMiddleware).forRoutes('news');
-    consumer.apply(ValidateJsonMiddleware).forRoutes('login');
-    consumer.apply(ValidateJsonMiddleware).forRoutes('users');
+    consumer.apply(ValidateJsonMiddleware).forRoutes('login', 'users');
   }
 }
