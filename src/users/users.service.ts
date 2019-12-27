@@ -15,7 +15,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly articlesService: ArticlesService,
-    private readonly usersToNewsService: UsersToArticlesService,
+    private readonly usersToArticlesService: UsersToArticlesService,
     private readonly hashHelper: HashHelper,
   ) {}
 
@@ -56,7 +56,7 @@ export class UsersService {
 
     const article = await this.articlesService.saveArticle(saveArticleDto);
 
-    return this.usersToNewsService.saveArticleToUser(user, article);
+    return this.usersToArticlesService.saveArticleToUser(user, article);
   }
 
   async getUserArticles(userId: string): Promise<Article[]> {
