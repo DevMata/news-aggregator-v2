@@ -20,7 +20,7 @@ export class UsersService {
   ) {}
 
   findAll(): Promise<User[]> {
-    return this.userRepository.find();
+    return this.userRepository.find({ select: ['userId', 'username', 'createdAt', 'modifiedAt'] });
   }
 
   async createOne(createUserDto: CreateUserDto): Promise<User> {
@@ -36,7 +36,7 @@ export class UsersService {
   }
 
   findUserById(id: string): Promise<User> {
-    return this.userRepository.findOne(id);
+    return this.userRepository.findOne(id, { select: ['userId', 'username', 'createdAt', 'modifiedAt'] });
   }
 
   findUserByName(username: string): Promise<User> {
