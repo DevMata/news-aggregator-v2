@@ -32,18 +32,18 @@ export class UsersService {
     }
   }
 
-  findOne(id: string): Promise<User> {
+  findUserById(id: string): Promise<User> {
     return this.userRepository.findOne(id);
   }
 
-  async updateUser(id: string, password: string): Promise<UpdateResult> {
-    const user = await this.findOne(id);
+  findUserByName(username: string): Promise<User> {
+    return this.userRepository.findOne({ username: username });
+  }
+
+  async changePassword(id: string, password: string): Promise<UpdateResult> {
+    const user = await this.findUserById(id);
     if (!user) throw new NotFoundException('User not found');
 
     return this.userRepository.update(id, { password: this.hashHelper.hash(password) });
-  }
-
-  findOneByName(username: string): Promise<User> {
-    return this.userRepository.findOne({ username: username });
   }
 }
