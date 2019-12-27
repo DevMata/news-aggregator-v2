@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException, MethodNotAllowedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { Repository, UpdateResult } from 'typeorm';
@@ -9,6 +9,7 @@ import { UsersToArticlesService } from './userstoarticles/userstoarticles.servic
 import { SaveArticleDto } from './articles/articles.dto';
 import { Article } from './articles/articles.entity';
 import { UsersToArticles } from './userstoarticles/userstoarticles.entity';
+import { UserBody } from 'src/login/dto/userbody.dto';
 
 @Injectable()
 export class UsersService {
@@ -79,5 +80,13 @@ export class UsersService {
     } else {
       return [];
     }
+  }
+
+  async shareArticle(user: UserBody, userId: string, webUrl: string): Promise<UsersToArticles> {
+    if (user.userId === userId) {
+      throw new MethodNotAllowedException('User must no share articles with himself');
+    }
+
+    return this.saveArticleToUser(userId, { webUrl });
   }
 }
