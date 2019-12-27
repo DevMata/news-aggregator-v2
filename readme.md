@@ -4,7 +4,7 @@ This API is built in NestJS framework with Typescript. It allows to search for a
 
 ## First steps
 
-1. run `npm run init`
+1. run `npm install`
 2. watch .envexample for get a guide of how provide your own NYT and The Guardian API keys, provide a dummy user and a dummy password for authentication and also provide a secret pass for JsonWebToken.
 3. run `npm run up`
 
