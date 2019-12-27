@@ -8,14 +8,14 @@ import { SaveNewDto } from './news.dto';
 export class NewsService {
   constructor(@InjectRepository(New) private readonly newsRepository: Repository<New>) {}
 
-  private async searchNew(saveNewDto: SaveNewDto): Promise<New> {
+  private async searchArticle(saveNewDto: SaveNewDto): Promise<New> {
     const searchedNew = await this.newsRepository.findOne({ webUrl: saveNewDto.webUrl });
 
     return searchedNew;
   }
 
-  async saveNew(saveNewDto: SaveNewDto): Promise<New> {
-    const searcheNew = await this.searchNew(saveNewDto);
+  async saveArticle(saveNewDto: SaveNewDto): Promise<New> {
+    const searcheNew = await this.searchArticle(saveNewDto);
     if (searcheNew) {
       return searcheNew;
     }
