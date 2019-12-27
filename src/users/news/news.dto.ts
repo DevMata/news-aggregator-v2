@@ -1,6 +1,6 @@
-import { IsFQDN } from 'class-validator';
+import { IsUrl } from 'class-validator';
 
 export class SaveNewDto {
-  @IsFQDN()
+  @IsUrl()
   webUrl: string;
 }
