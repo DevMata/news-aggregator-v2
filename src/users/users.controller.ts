@@ -16,7 +16,7 @@ export class UsersController {
 
   @Get(':id')
   findUser(@Param('id') id: string): Promise<User> {
-    return this.userService.findOne(id);
+    return this.userService.findUserById(id);
   }
 
   @Post()
@@ -31,6 +31,6 @@ export class UsersController {
   @Put(':id')
   @UsePipes(new ValidationPipe({ transform: true }))
   updateUser(@Param('id') id: string, @Body() changePasswordDto: ChangePasswordDto): Promise<UpdateResult> {
-    return this.userService.updateUser(id, changePasswordDto.password);
+    return this.userService.changePassword(id, changePasswordDto.password);
   }
 }
