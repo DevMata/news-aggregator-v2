@@ -1,7 +1,7 @@
 import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { ValidateSearchMiddleware } from './news/middleware/validate-search.middleware';
 import { ValidateSourceParamMiddleware } from './news/middleware/validate-source-param.middleware';
-import { ValidateJsonMiddleware } from './login/middleware/validate-json.middleware';
+import { ValidateJsonMiddleware } from './common/middleware/validate-json.middleware';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { NewsModule } from './news/news.module';
 import { UsersModule } from './users/users.module';
