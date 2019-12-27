@@ -9,11 +9,11 @@ import { New } from '../news/news.entity';
 export class UsersToNewsService {
   constructor(@InjectRepository(UsersToNews) private readonly usersToNewsRepository: Repository<UsersToNews>) {}
 
-  async searchNewFromUser(user: User, article: New): Promise<UsersToNews> {
+  private async searchNewFromUser(user: User, article: New): Promise<UsersToNews> {
     return this.usersToNewsRepository.findOne({ user: user, new: article });
   }
 
-  async saveNewToUser(user: User, article: New): Promise<UsersToNews> {
+  async saveArticleToUser(user: User, article: New): Promise<UsersToNews> {
     const searchedNewFromUser = await this.searchNewFromUser(user, article);
 
     if (searchedNewFromUser) {
