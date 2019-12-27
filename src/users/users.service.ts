@@ -29,8 +29,7 @@ export class UsersService {
       const { password } = createUserDto;
       createUserDto.password = this.hashHelper.hash(password);
 
-      const newUser = await this.userRepository.save(createUserDto);
-      return newUser;
+      return this.userRepository.save(createUserDto);
     } catch {
       throw new ConflictException('User already exists');
     }
