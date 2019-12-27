@@ -6,7 +6,7 @@ import { ChangePasswordDto } from './dto/password.dto';
 import { UpdateResult } from 'typeorm';
 import { SaveNewDto } from './news/news.dto';
 import { New } from './news/news.entity';
-import { UsersToNews } from './userstonews/userstonews.entity';
+import { UsersToNews } from './userstoarticles/userstonews.entity';
 
 @Controller('users')
 export class UsersController {

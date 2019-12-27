@@ -5,7 +5,7 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { HashHelper } from 'src/common/hash.helper';
 import { NewsModule } from './news/news.module';
-import { UsersToNewsModule } from './userstonews/userstonews.module';
+import { UsersToNewsModule } from './userstoarticles/userstonews.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), NewsModule, UsersToNewsModule],
