@@ -8,13 +8,13 @@ import { ArticlesService } from './articles/articles.service';
 import { UsersToNewsService } from './userstoarticles/userstonews.service';
 import { SaveArticleDto } from './articles/articles.dto';
 import { Article } from './articles/articles.entity';
-import { UsersToNews } from './userstoarticles/userstonews.entity';
+import { UsersToArticles } from './userstoarticles/userstoarticles.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    private readonly newsService: ArticlesService,
+    private readonly articlesService: ArticlesService,
     private readonly usersToNewsService: UsersToNewsService,
     private readonly hashHelper: HashHelper,
   ) {}
@@ -50,11 +50,11 @@ export class UsersService {
     return this.userRepository.update(id, { password: this.hashHelper.hash(password) });
   }
 
-  async saveArticleToUser(userId: string, saveArticleDto: SaveArticleDto): Promise<UsersToNews> {
+  async saveArticleToUser(userId: string, saveArticleDto: SaveArticleDto): Promise<UsersToArticles> {
     const user = await this.findUserById(userId);
     if (!user) throw new NotFoundException('User not found');
 
-    const article = await this.newsService.saveArticle(saveArticleDto);
+    const article = await this.articlesService.saveArticle(saveArticleDto);
 
     return this.usersToNewsService.saveArticleToUser(user, article);
   }
@@ -67,15 +67,15 @@ export class UsersService {
       join: {
         alias: 'user',
         leftJoinAndSelect: {
-          usersToNews: 'user.usersToNews',
-          new: 'usersToNews.article',
+          usersToArticles: 'user.usersToArticles',
+          article: 'usersToArticles.article',
         },
       },
       where: { userId: userId },
     });
 
-    if (x && x.usersToNews) {
-      return x.usersToNews.map(rel => rel.article);
+    if (x && x.usersToArticles) {
+      return x.usersToArticles.map(rel => rel.article);
     } else {
       return [];
     }

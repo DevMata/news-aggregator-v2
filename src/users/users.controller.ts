@@ -6,7 +6,7 @@ import { ChangePasswordDto } from './dto/password.dto';
 import { UpdateResult } from 'typeorm';
 import { SaveArticleDto } from './articles/articles.dto';
 import { Article } from './articles/articles.entity';
-import { UsersToNews } from './userstoarticles/userstonews.entity';
+import { UsersToArticles } from './userstoarticles/userstoarticles.entity';
 
 @Controller('users')
 export class UsersController {
@@ -39,8 +39,8 @@ export class UsersController {
 
   @Post(':userId')
   @UsePipes(new ValidationPipe({ transform: true }))
-  saveArticleToUser(@Param('userId') userId: string, @Body() saveNewDto: SaveArticleDto): Promise<UsersToNews> {
-    return this.userService.saveArticleToUser(userId, saveNewDto);
+  saveArticleToUser(@Param('userId') userId: string, @Body() saveArticleDto: SaveArticleDto): Promise<UsersToArticles> {
+    return this.userService.saveArticleToUser(userId, saveArticleDto);
   }
 
   @Get(':userId/articles')

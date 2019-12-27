@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { UsersToNews } from '../userstoarticles/userstonews.entity';
+import { UsersToArticles } from '../userstoarticles/userstoarticles.entity';
 
 @Entity()
 export class Article {
@@ -10,8 +10,8 @@ export class Article {
   webUrl: string;
 
   @OneToMany(
-    () => UsersToNews,
-    usersToNews => usersToNews.article,
+    () => UsersToArticles,
+    usersToArticles => usersToArticles.article,
   )
-  public usersToNews!: UsersToNews[];
+  public usersToArticles!: UsersToArticles[];
 }

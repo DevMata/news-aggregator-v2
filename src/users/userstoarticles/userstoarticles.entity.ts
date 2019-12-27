@@ -3,22 +3,22 @@ import { Article } from '../articles/articles.entity';
 import { User } from '../user.entity';
 
 @Entity()
-export class UsersToNews {
+export class UsersToArticles {
   @PrimaryGeneratedColumn('uuid')
-  usersToNewsId: string;
+  usersToArticlesId: string;
 
   @CreateDateColumn()
   savedAt: Date;
 
   @ManyToOne(
     () => User,
-    user => user.usersToNews,
+    user => user.usersToArticles,
   )
   public user!: User;
 
   @ManyToOne(
     () => Article,
-    article => article.usersToNews,
+    article => article.usersToArticles,
   )
   public article!: Article;
 }

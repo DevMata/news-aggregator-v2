@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
-import { UsersToNews } from './userstoarticles/userstonews.entity';
+import { UsersToArticles } from './userstoarticles/userstoarticles.entity';
 
 @Entity()
 export class User {
@@ -19,8 +19,8 @@ export class User {
   modifiedAt: Date;
 
   @OneToMany(
-    () => UsersToNews,
-    usersToNews => usersToNews.user,
+    () => UsersToArticles,
+    usersToArticles => usersToArticles.user,
   )
-  public usersToNews!: UsersToNews[];
+  public usersToArticles!: UsersToArticles[];
 }

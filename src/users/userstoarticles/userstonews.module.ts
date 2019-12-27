@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersToNews } from './userstonews.entity';
+import { UsersToArticles } from './userstoarticles.entity';
 import { UsersToNewsService } from './userstonews.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UsersToNews])],
+  imports: [TypeOrmModule.forFeature([UsersToArticles])],
   providers: [UsersToNewsService],
   exports: [UsersToNewsService],
 })
