@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/user.dto';
 import { HashHelper } from 'src/common/hash.helper';
 import { NewsService } from './news/news.service';
 import { UsersToNewsService } from './userstonews/userstonews.service';
+import { SaveNewDto } from './news/news.dto';
 
 @Injectable()
 export class UsersService {
@@ -45,5 +46,14 @@ export class UsersService {
     if (!user) throw new NotFoundException('User not found');
 
     return this.userRepository.update(id, { password: this.hashHelper.hash(password) });
+  }
+
+  async saveNewToUser(userId: string, a: SaveNewDto): Promise<void> {
+    const user = await this.findUserById(userId);
+    if (!user) throw new NotFoundException('User does not exists');
+
+    const article = await this.newsService.saveNew(a);
+
+    this.usersToNewsService.saveArticleToUser(user, article);
   }
 }
