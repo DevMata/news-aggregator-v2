@@ -7,7 +7,7 @@ import { HashHelper } from 'src/common/hash.helper';
 import { NewsService } from './articles/news.service';
 import { UsersToNewsService } from './userstoarticles/userstonews.service';
 import { SaveArticleDto } from './articles/articles.dto';
-import { New } from './articles/news.entity';
+import { Article } from './articles/articles.entity';
 import { UsersToNews } from './userstoarticles/userstonews.entity';
 
 @Injectable()
@@ -59,7 +59,7 @@ export class UsersService {
     return this.usersToNewsService.saveArticleToUser(user, article);
   }
 
-  async getUserArticles(userId: string): Promise<New[]> {
+  async getUserArticles(userId: string): Promise<Article[]> {
     const user = await this.findUserById(userId);
     if (!user) throw new NotFoundException('User not found');
 

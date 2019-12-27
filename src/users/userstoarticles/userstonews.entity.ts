@@ -1,5 +1,5 @@
 import { Entity, CreateDateColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { New } from '../articles/news.entity';
+import { Article } from '../articles/articles.entity';
 import { User } from '../user.entity';
 
 @Entity()
@@ -17,8 +17,8 @@ export class UsersToNews {
   public user!: User;
 
   @ManyToOne(
-    () => New,
+    () => Article,
     article => article.usersToNews,
   )
-  public article!: New;
+  public article!: Article;
 }

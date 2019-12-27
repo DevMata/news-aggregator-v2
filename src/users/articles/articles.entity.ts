@@ -2,9 +2,9 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { UsersToNews } from '../userstoarticles/userstonews.entity';
 
 @Entity()
-export class New {
+export class Article {
   @PrimaryGeneratedColumn('uuid')
-  newId: string;
+  articleId: string;
 
   @Column()
   webUrl: string;

@@ -5,7 +5,7 @@ import { CreateUserDto } from './dto/user.dto';
 import { ChangePasswordDto } from './dto/password.dto';
 import { UpdateResult } from 'typeorm';
 import { SaveArticleDto } from './articles/articles.dto';
-import { New } from './articles/news.entity';
+import { Article } from './articles/articles.entity';
 import { UsersToNews } from './userstoarticles/userstonews.entity';
 
 @Controller('users')
@@ -44,7 +44,7 @@ export class UsersController {
   }
 
   @Get(':userId/articles')
-  getUserArticles(@Param('userId') userId: string): Promise<New[]> {
+  getUserArticles(@Param('userId') userId: string): Promise<Article[]> {
     return this.userService.getUserArticles(userId);
   }
 }
