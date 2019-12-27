@@ -10,6 +10,7 @@ import {
   UseInterceptors,
   ClassSerializerInterceptor,
   UseGuards,
+  Req,
 } from '@nestjs/common';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
@@ -19,7 +20,7 @@ import { UpdateResult } from 'typeorm';
 import { SaveArticleDto } from './articles/articles.dto';
 import { Article } from './articles/articles.entity';
 import { UsersToArticles } from './userstoarticles/userstoarticles.entity';
-import { UserSerialize } from './users.serializer';
+import { UserSerialize } from './dto/users.serializer';
 import { AuthGuard } from '@nestjs/passport';
 import { ShareArticleDto } from './dto/shareArticle.dto';
 
@@ -70,7 +71,7 @@ export class UsersController {
   @Post(':userId/share')
   @UseGuards(AuthGuard('jwt'))
   @UsePipes(new ValidationPipe({ transform: true }))
-  shareArticle(@Body() shareArticleDto: ShareArticleDto): Promise<UsersToArticles> {
-    return this.userService.saveArticleToUser(shareArticleDto.userId, { webUrl: shareArticleDto.webUrl });
+  shareArticle(@Req() request, @Body() shareArticleDto: ShareArticleDto): Promise<UsersToArticles> {
+    return this.userService.shareArticle(request.user, shareArticleDto.userId, shareArticleDto.webUrl);
   }
 }
