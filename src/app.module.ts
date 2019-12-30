@@ -37,5 +37,6 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
     consumer.apply(ValidateSearchMiddleware, ValidateSourceParamMiddleware).forRoutes('news');
     consumer.apply(ValidateJsonMiddleware).forRoutes('login', 'users');
+    consumer.apply(ValidateUuidMiddleware).forRoutes('users');
   }
 }
